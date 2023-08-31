@@ -5,6 +5,7 @@
 
 'use strict';
 
+let allowLogs = false;
 // Refactoring of inline script from index.html.
 /*global SwaggerUi, log, ApiKeyAuthorization, hljs, window, $ */
 $(function() {
@@ -16,6 +17,7 @@ $(function() {
   var lsKey = 'swagger_accessToken';
   var appKey = 'authToken';
   $.getJSON('config.json', function(config) {
+    allowLogs = config.allowLogs;
     log(config);
     loadSwaggerUi(config);
   });
@@ -143,7 +145,7 @@ $(function() {
   }
 
   function log() {
-    if ('console' in window) {
+    if (allowLogs && 'console' in window) {
       console.log.apply(console, arguments);
     }
   }

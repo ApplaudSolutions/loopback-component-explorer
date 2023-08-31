@@ -71,6 +71,7 @@ function routes(loopbackApplication, options) {
     }
     res.send({
       url: urlJoin(source, '/' + options.resourcePath),
+      allowLogs: _.get(process, 'env.NODE_ENV') === 'development',
     });
   });
 
