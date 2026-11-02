@@ -46,13 +46,14 @@ $(function() {
     if (type) {
       url += (url.indexOf('?') > 0 ? '&' : '?') + 'type=' + type;
     }
-    if (token) {
-      url += (url.indexOf('?') > 0 ? '&' : '?') + 'acccess_token=' + token;
-    }
     /* eslint-disable camelcase */
     window.swaggerUi = new SwaggerUi({
       validatorUrl: null,
       url: url,
+      // Token goes in a header, not the URL, so it is not logged or leaked (SA-1505).
+      authorizations: token ? {
+        key: new SwaggerClient.ApiKeyAuthorization('Authorization', token, 'header'),
+      } : {},
       apiKey: '',
       dom_id: 'swagger-ui-container',
       supportHeaderParams: true,
@@ -105,7 +106,7 @@ $(function() {
     if (key && key.trim() !== '') {
       log('added accessToken ' + key);
       var apiKeyAuth =
-        new SwaggerClient.ApiKeyAuthorization('access_token', key, 'query');
+        new SwaggerClient.ApiKeyAuthorization('Authorization', key, 'header');
       window.swaggerUi.api.clientAuthorizations.add('key', apiKeyAuth);
       accessToken = key;
       $('.accessTokenDisplay').text('Token Set.').addClass('set');
